@@ -9,22 +9,37 @@
 
 TBitField::TBitField(int len)
 {
+	BitLen = len;
+	MemLen = (len / sizeof(TELEM)) + 1;
+	pMem = new TELEM[MemLen];
+	memset(pMem, 0, MemLen * 4);
 }
 
 TBitField::TBitField(const TBitField &bf) // конструктор копирования
 {
+	BitLen = bf.BitLen;
+	MemLen = bf.MemLen;
+	pMem = new TELEM[MemLen];
+	memcpy(pMem, bf.pMem, MemLen * 4);
 }
 
 TBitField::~TBitField()
 {
+	delete pMem;
+	cout << "Cработал деструктор";
 }
 
 int TBitField::GetMemIndex(const int n) const // индекс Мем для бита n
 {
+	return n / sizeof(TELEM);
 }
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
 {
+	TELEM a;
+	a = 1;
+	a << (n % sizeof(TELEM));
+	return a;
 }
 
 // доступ к битам битового поля
